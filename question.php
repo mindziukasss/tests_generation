@@ -1,6 +1,14 @@
-<?php include 'db.php'; 
+<?php
+  session_start();
+
+
+ include 'db.php'; 
   
   $number = (int)$_GET['n'];
+
+  $query = "SELECT * FROM questions";
+  $results = $mysqli->query($query) or die($mysqli->error.__LINE__);
+  $total = $results->num_rows;
 
   $query = "SELECT * FROM questions WHERE  question_number = $number";
   $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
@@ -26,7 +34,7 @@
   </header>
   <main>
     <div class="container">
-      <div class="current">Questtion 1 of 5</div>
+      <div class="current">Questtion <?php echo $question['question_number']; ?>of <?php echo $total; ?></div>
       <p class="question"><?php echo $question['text']; ?></p>
       <form method="post" action="process.php">
         <ul class="choices">
@@ -35,6 +43,7 @@
           <?php endwhile; ?>
         </ul>
         <input type="submit" name="submit" value="Submit">
+        <input type="hidden" name="number" value="<?php echo $number;?>">
       </form>
     </div>
   </main>
